@@ -1,0 +1,24 @@
+# Ignore all dotfiles and directories. and ignore files that start
+# with underscore
+# This includes any . file in any directory, and directories themselves
+# E.g.: .settings, .history, .idea, .idea_modules, .classpath
+.*
+_*
+
+# don't ignore .gitignore
+!.gitignore
+
+/target
+/bin
+/log
+
+# properties file
+app.properties
+
+# for testing stuff
+go*
+
+# logback configs
+/src/main/resources/logback.xml
+/src/main/resources/logback-test.xml
+
