@@ -1,2 +1,2 @@
-# mini-alien-game
-Mini planet colonization game
+# Alien Colonization Game
+by Trash Team Inc.
