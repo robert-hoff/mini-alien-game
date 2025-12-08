@@ -26,6 +26,11 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
   private boolean movingDown = false;
   private boolean movingLeft = false;
   private boolean movingRight = false;
+  
+  //Player objects
+  private Player playerOne = new Player();
+  private Player playerTwo = new Player();
+
 
   // Game loop timer (roughly 120 FPS -> 1000ms / 120 ≈ 8)
   private final Timer timer;
@@ -35,6 +40,11 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
     setBackground(Color.BLACK);
     setFocusable(true);
     addKeyListener(this);
+    
+    //Create "Base" units
+
+    playerOne.addUnit(new Unit(5,50,0,5000,100,1.0, 780, 300));
+    playerTwo.addUnit(new Unit(5,50,0,5000,100,1.0, 0, 300));
     timer = new Timer(8, this);
     timer.start();
   }
@@ -42,15 +52,63 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-    // Draw the square
+    // Draw the player units
     g.setColor(Color.WHITE);
     g.fillRect(x, y, size, size);
+    
+    //Draw units (the size is temp)
+    for (Unit unit : playerOne.getUnits()) {
+    	g.setColor(Color.BLUE);
+    	g.fillRect(unit.getxPos(), unit.getyPos(), 20, 20);
+    }
+    
+    for (Unit unit : playerTwo.getUnits()) {
+    	g.setColor(Color.RED);
+    	g.fillRect(unit.getxPos(), unit.getyPos(), 20, 20);
+    }
   }
 
   @Override
   public void actionPerformed(ActionEvent e) {
     updatePosition();
     repaint();
+    updateUnits(playerOne, playerTwo);
+    updateUnits(playerTwo, playerOne);
+    killUnits(playerOne, playerTwo);
+  }
+  
+  //TODO: add accuracy
+  private void updateUnits (Player friendlyPlayer, Player enemyPlayer) {
+	  for (Unit friendlyUnit : friendlyPlayer.getUnits()) {
+		  boolean moving = true;
+		  for (Unit enemyUnit : enemyPlayer.getUnits()) {
+			  //If enemy unit in range
+			  if (friendlyUnit.getRange() > Math.abs(friendlyUnit.getxPos() - enemyUnit.getxPos())) {
+				  //Friendly unit stops moving
+				  moving = false;
+				  enemyUnit.takeDamage(friendlyUnit.getStrength());
+				  System.out.println(enemyUnit.getHealth());
+			  }
+			  //Only attack one enemy
+			  break;
+		  }
+		  if (moving == true) {
+			  friendlyUnit.move();
+		  }
+	  }
+  }
+  
+  private void killUnits (Player playerOne, Player playerTwo) {
+	  for (Unit unit : playerOne.getUnits()) {
+		  if (unit.getHealth() <= 0) {
+			  playerOne.removeUnit(unit);
+		  }
+	  }
+	  for (Unit unit : playerTwo.getUnits()) {
+		  if (unit.getHealth() <= 0) {
+			  playerTwo.removeUnit(unit);
+		  }
+	  }
   }
 
   private void updatePosition() {
