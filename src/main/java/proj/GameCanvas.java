@@ -1,12 +1,17 @@
 package proj;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Rectangle2D;
+
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import org.slf4j.Logger;
@@ -18,7 +23,7 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
   // Position and size of player1
   private int x = 100;
   private int y = 100;
-  private final int size = 10;
+  private final int size = 12;
   private final int speed = 3;
 
   // Movement flags (for smooth movement)
@@ -32,7 +37,7 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
 
   public GameCanvas() {
     setPreferredSize(new Dimension(800, 600));
-    setBackground(Color.BLACK);
+    setBackground(Color.WHITE);
     setFocusable(true);
     addKeyListener(this);
     timer = new Timer(8, this);
@@ -42,9 +47,16 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
-    // Draw the square
-    g.setColor(Color.WHITE);
-    g.fillRect(x, y, size, size);
+
+    Graphics2D g2 = (Graphics2D) g;
+    g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+    // Draw the player
+    g2.setColor(Color.RED);
+    g2.fill(new Rectangle2D.Double(x, y, size, size));
+    g2.setColor(Color.BLACK);
+    g2.setStroke(new BasicStroke(2));
+    g2.draw(new Rectangle2D.Double(x, y, size, size));
   }
 
   @Override
