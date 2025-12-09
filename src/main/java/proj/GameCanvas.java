@@ -11,7 +11,11 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import org.slf4j.Logger;
@@ -38,7 +42,17 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
   private final int FPS = 60;
   private final int msPerFrame = 1000 / FPS;
 
+  private BufferedImage backgroundImage;
+
+
   public GameCanvas(int winWidth, int winHeight) {
+    try {
+      backgroundImage = ImageIO.read(GameCanvas.class.getResource("/game-field.png"));
+    } catch (Exception e) {
+      e.printStackTrace();
+      throw new RuntimeException("can't find required game asset");
+    }
+
     setPreferredSize(new Dimension(winWidth, winHeight));
     setBackground(Color.WHITE);
     setFocusable(true);
@@ -54,6 +68,9 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
 
     Graphics2D g2 = (Graphics2D) g;
     g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+    // playing field
+    g2.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), null);
 
     // Draw the player
     g2.setColor(Color.RED);
