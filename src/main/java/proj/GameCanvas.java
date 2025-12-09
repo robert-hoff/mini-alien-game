@@ -6,17 +6,17 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.WindowEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
-
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,6 +46,7 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
 
 
   public GameCanvas(int winWidth, int winHeight) {
+    log.trace("GameCanvas");
     try {
       backgroundImage = ImageIO.read(GameCanvas.class.getResource("/game-field.png"));
     } catch (Exception e) {
@@ -53,7 +54,10 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
       throw new RuntimeException("can't find required game asset");
     }
 
-    setPreferredSize(new Dimension(winWidth, winHeight));
+    if (winWidth > 0 && winHeight > 0) {
+      setPreferredSize(new Dimension(winWidth, winHeight));
+    }
+
     setBackground(Color.WHITE);
     setFocusable(true);
     addKeyListener(this);
@@ -119,7 +123,6 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
   }
 
   // KeyListener methods
-
   @Override
   public void keyPressed(KeyEvent e) {
     int code = e.getKeyCode();
@@ -141,8 +144,8 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
       System.out.println(getHeight());
     }
     if (code == KeyEvent.VK_ESCAPE) {
-      log.info("exit game");
-      System.exit(0);
+      Window window = SwingUtilities.getWindowAncestor(this);
+      window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
     }
   }
 
@@ -164,10 +167,9 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
     }
   }
 
+  // method needed by KeyListener
   @Override
-  public void keyTyped(KeyEvent e) {
-    // Not used, but required by KeyListener
-  }
+  public void keyTyped(KeyEvent e) {}
 
   private static Logger log = LoggerFactory.getLogger(MainClass.class);
 }

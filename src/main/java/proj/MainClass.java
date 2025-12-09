@@ -2,10 +2,10 @@ package proj;
 
 import java.awt.GraphicsDevice;
 import java.awt.GraphicsEnvironment;
-
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,8 @@ public class MainClass {
       // to change the game width/height or full-screen mode, change the properties file
       int DEFAULT_GAME_WIDTH = 1000;
       int DEFAULT_GAME_HEIGHT = 600;
-      int DEFAULT_FULLSCREENMODE = 0; // set to 1 for full-screen
+      // set to 1 for full-screen (in properties file)
+      int DEFAULT_FULLSCREENMODE = 0;
 
       ApplicationProp propFile = new ApplicationProp();
       Integer winX = propFile.readInt("winX","-1");
@@ -27,11 +28,20 @@ public class MainClass {
       Integer winHeight = propFile.readInt("winHeight", DEFAULT_GAME_HEIGHT);
       Integer fullScreenMode = propFile.readInt("fullScreenMode", DEFAULT_FULLSCREENMODE);
 
-      // - change and save properties like this
-      // propFile.addProperty("winX", "100");
-      // propFile.saveToFile();
+      JFrame frame = new JFrame("Planet Battle");
+      frame.addWindowListener(new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent e) {
+          log.info("exit game - save window configs");
+          if (fullScreenMode == 0) {
+            propFile.addProperty("winX", ""+frame.getX());
+            propFile.addProperty("winY", ""+frame.getY());
+          }
+          propFile.saveToFile();
+          System.exit(0);
+        }
+      });
 
-      JFrame frame = new JFrame("Alien Colonization");
       GameCanvas gamePanel = new GameCanvas(winWidth, winHeight);
 
       if (fullScreenMode > 0) {
@@ -55,6 +65,10 @@ public class MainClass {
       }
 
       frame.setVisible(true);
+
+      // the game's dimensions are known at this point
+      log.info(String.format("game size = (%d,%d)", gamePanel.getWidth(), gamePanel.getHeight()));
+
       // focus the panel to receive key events
       gamePanel.requestFocusInWindow();
     });
@@ -63,5 +77,4 @@ public class MainClass {
 
   private static Logger log = LoggerFactory.getLogger(MainClass.class);
 }
-
 
