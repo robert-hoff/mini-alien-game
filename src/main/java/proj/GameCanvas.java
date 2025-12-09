@@ -21,10 +21,12 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
 
   private static final long serialVersionUID = 1L;
   // Position and size of player1
-  private int x = 100;
-  private int y = 100;
+  private double x = 100;
+  private double y = 100;
   private final int size = 12;
-  private final int speed = 3;
+  // private final int speed = 5;
+  private final double speed = 300.0; // pixels per second (tune as you like)
+  private long lastTime = System.nanoTime();
 
   // Movement flags (for smooth movement)
   private boolean movingUp = false;
@@ -32,15 +34,17 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
   private boolean movingLeft = false;
   private boolean movingRight = false;
 
-  // Game loop timer (roughly 120 FPS -> 1000ms / 120 ≈ 8)
   private final Timer timer;
+  private final int FPS = 60;
+  private final int msPerFrame = 1000 / FPS;
 
-  public GameCanvas() {
-    setPreferredSize(new Dimension(800, 600));
+  public GameCanvas(int winWidth, int winHeight) {
+    setPreferredSize(new Dimension(winWidth, winHeight));
     setBackground(Color.WHITE);
     setFocusable(true);
     addKeyListener(this);
-    timer = new Timer(8, this);
+
+    timer = new Timer(msPerFrame, this);
     timer.start();
   }
 
@@ -61,22 +65,25 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    updatePosition();
+    long now = System.nanoTime();
+    double deltaSeconds = (now - lastTime) / 1_000_000_000.0;
+    lastTime = now;
+    updatePosition(deltaSeconds);
     repaint();
   }
 
-  private void updatePosition() {
+  private void updatePosition(double deltaSeconds) {
     if (movingUp) {
-      y -= speed;
+      y -= speed * deltaSeconds;
     }
     if (movingDown) {
-      y += speed;
+      y += speed * deltaSeconds;
     }
     if (movingLeft) {
-      x -= speed;
+      x -= speed * deltaSeconds;
     }
     if (movingRight) {
-      x += speed;
+      x += speed * deltaSeconds;
     }
 
     // Keep the square inside the window bounds
@@ -111,6 +118,10 @@ public class GameCanvas extends JPanel implements ActionListener, KeyListener {
     }
     if (code == KeyEvent.VK_D) {
       movingRight = true;
+    }
+    if (code == KeyEvent.VK_P) {
+      System.out.println(getWidth());
+      System.out.println(getHeight());
     }
     if (code == KeyEvent.VK_ESCAPE) {
       log.info("exit game");
