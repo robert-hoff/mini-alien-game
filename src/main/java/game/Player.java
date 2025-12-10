@@ -12,6 +12,9 @@ public class Player extends Entity {
   protected int hp;
   protected boolean stop = true;
   protected ResourceType resource;
+  private int sand;
+  private int water;
+  private int grass;
 
   public Player(double x, double y) {
     this.x = x;
@@ -28,8 +31,21 @@ public class Player extends Entity {
     this.resource = resource;
   }
 
-  public ResourceType getResourceType() {
-    return resource;
+  private void collectResource() {
+    int cap = 50;
+    if (resource == ResourceType.GRASS && grass < cap) {
+      grass++;
+    }
+    if (resource == ResourceType.WATER && water < cap) {
+      water++;
+    }
+    if (resource == ResourceType.SAND && sand < cap) {
+      sand++;
+    }
+  }
+
+  public String getResourceInventory() {
+    return String.format("%dS %dW %dG", sand, water, grass);
   }
 
   public void setdirection(double direction) {
@@ -40,8 +56,21 @@ public class Player extends Entity {
     this.stop = stop;
   }
 
+  private double dtSum = 0;
+
   @Override
   public void update(double dt) {
+    dtSum += dt;
+    double stationaryCollect = 0.15;
+    double movingCollect = 0.15;
+    if (stop && dtSum > stationaryCollect) {
+      collectResource();
+      dtSum = 0;
+    }
+    if (!stop && dtSum > movingCollect) {
+      collectResource();
+      dtSum = 0;
+    }
     if (stop) {
       return;
     } else {

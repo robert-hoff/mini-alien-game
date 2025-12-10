@@ -104,10 +104,8 @@ public class GameState {
   private void drawStatusBar(Graphics2D g2) {
     g2.setColor(new Color(0x555555));
     g2.fill(new Rectangle2D.Double(0, 0, worldWidth, STATUSBAR_HEIGHT));
-
-    String player1Text = ""+players[0].getResourceType();
     g2.setColor(Color.WHITE);
-    g2.drawString(player1Text, 5, 15);
+    g2.drawString(players[0].getResourceInventory(), 5, 15);
     // g2.drawString(player1Text, 5, 30);
   }
 
