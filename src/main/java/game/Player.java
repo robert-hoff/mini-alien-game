@@ -11,6 +11,7 @@ public class Player extends Entity {
   protected double speed;
   protected int hp;
   protected boolean stop = true;
+  protected ResourceType resource;
 
   public Player(double x, double y) {
     this.x = x;
@@ -18,6 +19,17 @@ public class Player extends Entity {
     this.size = 13;
     this.speed = 300;
     this.hp = 200;
+  }
+
+  public double getX() {return x;}
+  public double getY() {return y;}
+
+  public void setResourceType(ResourceType resource) {
+    this.resource = resource;
+  }
+
+  public ResourceType getResourceType() {
+    return resource;
   }
 
   public void setdirection(double direction) {

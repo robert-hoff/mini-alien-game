@@ -70,6 +70,9 @@ public class InputHandler implements KeyListener {
       Window window = SwingUtilities.getWindowAncestor(gameCanvas);
       window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
     }
+    if (code == KeyEvent.VK_P) {
+      gameState.handleAction(GameAction.TEST_ACTION);
+    }
   }
 
   @Override
