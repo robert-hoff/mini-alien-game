@@ -21,6 +21,6 @@ public abstract class Entity {
   protected double size;
 
   public abstract void update(double dt);
-  public abstract void draw(Graphics2D g);
+  public abstract void draw(Graphics2D g2);
 }
 

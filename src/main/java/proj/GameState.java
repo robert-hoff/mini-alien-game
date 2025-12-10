@@ -1,10 +1,13 @@
 package proj;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import game.Base;
 import game.Entity;
 import game.GameAction;
 import game.Player;
@@ -17,6 +20,7 @@ public class GameState {
   private BufferedImage backgroundImage;
 
   Player[] players = new Player[2];
+  Base[] bases = new Base[2];
 
   /*
    * winWidth, winHeight is the available screen size
@@ -35,6 +39,8 @@ public class GameState {
       throw new RuntimeException("can't find required game asset");
     }
     players[0] = new Player(160, worldHeight/2);
+    bases[0] = new Base(true);
+    bases[1] = new Base(false);
   }
 
   public void handleAction(GameAction action) {
@@ -58,7 +64,15 @@ public class GameState {
 
   public void render(Graphics2D g2) {
     g2.drawImage(backgroundImage, 0, STATUSBAR_HEIGHT, (int) worldWidth, (int) worldHeight, null);
+    bases[0].draw(g2);
+    bases[1].draw(g2);
     players[0].draw(g2);
+    drawStatusBar(g2);
+  }
+
+  private void drawStatusBar(Graphics2D g2) {
+    g2.setColor(new Color(0x555555));
+    g2.fill(new Rectangle2D.Double(0, 0, worldWidth, STATUSBAR_HEIGHT));
   }
 
   private static Logger log = LoggerFactory.getLogger(MainClass.class);

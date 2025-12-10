@@ -55,9 +55,9 @@ public class Player extends Entity {
   @Override
   public void draw(Graphics2D g2) {
     double half = size/2;
-    g2.setColor(Color.RED);
+    g2.setColor(new Color(0xFF7D7D));
     g2.fill(new Rectangle2D.Double(x-half, y-half, size, size));
-    g2.setColor(Color.BLACK);
+    g2.setColor(new Color(0x322023));
     g2.setStroke(new BasicStroke(2));
     g2.draw(new Rectangle2D.Double(x-half, y-half, size, size));
   }

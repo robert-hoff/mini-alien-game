@@ -11,7 +11,6 @@ import javax.swing.Timer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
 public class GameCanvas extends JPanel implements ActionListener {
 
   private static final long serialVersionUID = 1L;
