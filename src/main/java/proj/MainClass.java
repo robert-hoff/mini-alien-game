@@ -17,7 +17,7 @@ public class MainClass {
 
       // to change the game width/height or full-screen mode, change the properties file
       int DEFAULT_GAME_WIDTH = 1000;
-      int DEFAULT_GAME_HEIGHT = 600;
+      int DEFAULT_GAME_HEIGHT = 800;
       // set to 1 for full-screen (in properties file)
       int DEFAULT_FULLSCREENMODE = 0;
 
@@ -64,13 +64,20 @@ public class MainClass {
         frame.setResizable(false);
       }
 
-      frame.setVisible(true);
-
       // the game's dimensions are known at this point
+      frame.setVisible(true);
       log.info(String.format("game size = (%d,%d)", gamePanel.getWidth(), gamePanel.getHeight()));
 
+      // set up the game before making it visible
+      GameState gameState = new GameState(gamePanel.getWidth(), gamePanel.getHeight());
+      gamePanel.startGame(gameState);
+      frame.addKeyListener(new InputHandler(gameState, gamePanel));
+
       // focus the panel to receive key events
-      gamePanel.requestFocusInWindow();
+      // gamePanel.requestFocusInWindow();
+      frame.setFocusable(true);
+      frame.requestFocusInWindow();
+
     });
   }
 
