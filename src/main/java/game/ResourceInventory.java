@@ -48,8 +48,8 @@ public class ResourceInventory {
 
   public void spendUnitcost(UnitCost unitCost) {
     grass -= unitCost.grass;
-    sand -= unitCost.grass;
-    water -= unitCost.grass;
+    sand -= unitCost.sand;
+    water -= unitCost.water;
     if (grass < 0 || sand < 0 || water < 0) {
       throw new RuntimeException("unitCost exceeds resources, call not allowed");
     }

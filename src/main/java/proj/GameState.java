@@ -52,6 +52,7 @@ public class GameState {
     players[0] = new Player(160, worldHeight/2, true);
     players[1] = new Player(worldWidth-140, worldHeight/2, false);
     players[0].setResourceType(getResourceType(players[0].getX(), players[0].getY()));
+    players[1].setResourceType(getResourceType(players[1].getX(), players[1].getY()));
     bases[0] = new Base(true);
     bases[1] = new Base(false);
   }
@@ -81,20 +82,20 @@ public class GameState {
       case PLAYER1_NW -> {players[0].setdirection(Math.PI * 5 / 4); players[0].setStop(false);}
       case PLAYER1_STOP -> players[0].setStop(true);
       case PLAYER1_PURCHASE_MARINE -> {
-        if (players[0].canAffordUnit(Marine.unitCost)) {
-          players[0].spendUnitCost(Marine.unitCost);
+        if (players[0].getResourceInventory().canAffordUnit(Marine.unitCost)) {
+          players[0].getResourceInventory().spendUnitcost(Marine.unitCost);
           player1Units.add(new Marine(10, worldHeight/2, true));
         }
       }
       case PLAYER1_PURCHASE_SNIPER -> {
-        if (players[0].canAffordUnit(Sniper.unitCost)) {
-          players[0].spendUnitCost(Sniper.unitCost);
+        if (players[0].getResourceInventory().canAffordUnit(Sniper.unitCost)) {
+          players[0].getResourceInventory().spendUnitcost(Sniper.unitCost);
           player1Units.add(new Sniper(10, worldHeight/2, true));
         }
       }
       case PLAYER1_PURCHASE_ROGUE -> {
-        if (players[0].canAffordUnit(Rogue.unitCost)) {
-          players[0].spendUnitCost(Rogue.unitCost);
+        if (players[0].getResourceInventory().canAffordUnit(Rogue.unitCost)) {
+          players[0].getResourceInventory().spendUnitcost(Rogue.unitCost);
           player1Units.add(new Rogue(10, worldHeight/2, true));
         }
       }
@@ -108,20 +109,20 @@ public class GameState {
       case PLAYER2_NW -> {players[1].setdirection(Math.PI * 5 / 4); players[1].setStop(false);}
       case PLAYER2_STOP -> players[1].setStop(true);
       case PLAYER2_PURCHASE_MARINE -> {
-        if (players[1].canAffordUnit(Marine.unitCost)) {
-          players[1].spendUnitCost(Marine.unitCost);
+        if (players[1].getResourceInventory().canAffordUnit(Marine.unitCost)) {
+          players[1].getResourceInventory().spendUnitcost(Marine.unitCost);
           player2Units.add(new Marine(worldWidth-30, worldHeight/2, false));
         }
       }
       case PLAYER2_PURCHASE_SNIPER -> {
-        if (players[1].canAffordUnit(Sniper.unitCost)) {
-          players[1].spendUnitCost(Sniper.unitCost);
+        if (players[1].getResourceInventory().canAffordUnit(Sniper.unitCost)) {
+          players[1].getResourceInventory().spendUnitcost(Sniper.unitCost);
           player2Units.add(new Sniper(worldWidth-30, worldHeight/2, false));
         }
       }
       case PLAYER2_PURCHASE_ROGUE -> {
-        if (players[1].canAffordUnit(Rogue.unitCost)) {
-          players[1].spendUnitCost(Rogue.unitCost);
+        if (players[1].getResourceInventory().canAffordUnit(Rogue.unitCost)) {
+          players[1].getResourceInventory().spendUnitcost(Rogue.unitCost);
           player2Units.add(new Rogue(worldWidth-30, worldHeight/2, false));
         }
       }

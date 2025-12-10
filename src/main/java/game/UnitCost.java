@@ -9,4 +9,8 @@ public class UnitCost {
     this.sand = sand;
     this.water = water;
   }
+  @Override
+  public String toString() {
+    return String.format("%d,%d,%d", grass, sand, water);
+  }
 }

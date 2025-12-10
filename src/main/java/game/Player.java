@@ -52,14 +52,6 @@ public class Player extends Entity {
     this.direction = direction;
   }
 
-  public boolean canAffordUnit(UnitCost unitCost) {
-    return resourceInventory.canAffordUnit(unitCost);
-  }
-
-  public void spendUnitCost(UnitCost unitCost) {
-    resourceInventory.spendUnitcost(unitCost);
-  }
-
   public void setStop(boolean stop) {
     this.stop = stop;
   }
