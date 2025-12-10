@@ -16,6 +16,7 @@ public abstract class Unit extends Entity {
   protected double accuracy;
   protected int damage;
   protected double spinD = 0.03;
+  protected Color color = Color.RED;
 
   private double spin;
   @Override
@@ -54,7 +55,7 @@ public abstract class Unit extends Entity {
   @Override
   public void draw(Graphics2D g2) {
     Shape tri = createEquilateralTriangle(size, spin, x, y);
-    g2.setColor(new Color(0xFF7D7D));
+    g2.setColor(color);
     g2.fill(tri);
     g2.setStroke(new BasicStroke(2f));
     g2.setColor(new Color(0x322023));

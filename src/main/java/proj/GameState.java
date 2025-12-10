@@ -1,6 +1,7 @@
 package proj;
 
 import java.awt.Color;
+import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -29,6 +30,7 @@ public class GameState {
   Player[] players = new Player[2];
   Base[] bases = new Base[2];
   List<Unit> player1Units = new ArrayList<>();
+  List<Unit> player2Units = new ArrayList<>();
 
   /*
    * winWidth, winHeight is the available screen size
@@ -46,7 +48,8 @@ public class GameState {
       e.printStackTrace();
       throw new RuntimeException("can't find required game asset");
     }
-    players[0] = new Player(160, worldHeight/2);
+    players[0] = new Player(160, worldHeight/2, true);
+    players[1] = new Player(worldWidth-140, worldHeight/2, false);
     players[0].setResourceType(getResourceType(players[0].getX(), players[0].getY()));
     bases[0] = new Base(true);
     bases[1] = new Base(false);
@@ -94,6 +97,33 @@ public class GameState {
           player1Units.add(new Rogue(10, worldHeight/2, true));
         }
       }
+      case PLAYER2_N  -> {players[1].setdirection(Math.PI * 6 / 4); players[1].setStop(false);}
+      case PLAYER2_NE -> {players[1].setdirection(Math.PI * 7 / 4); players[1].setStop(false);}
+      case PLAYER2_E  -> {players[1].setdirection(Math.PI * 0 / 4); players[1].setStop(false);}
+      case PLAYER2_SE -> {players[1].setdirection(Math.PI * 1 / 4); players[1].setStop(false);}
+      case PLAYER2_S  -> {players[1].setdirection(Math.PI * 2 / 4); players[1].setStop(false);}
+      case PLAYER2_SW -> {players[1].setdirection(Math.PI * 3 / 4); players[1].setStop(false);}
+      case PLAYER2_W  -> {players[1].setdirection(Math.PI * 4 / 4); players[1].setStop(false);}
+      case PLAYER2_NW -> {players[1].setdirection(Math.PI * 5 / 4); players[1].setStop(false);}
+      case PLAYER2_STOP -> players[1].setStop(true);
+      case PLAYER2_PURCHASE_MARINE -> {
+        if (players[1].canAffordUnit(Marine.unitCost)) {
+          players[1].spendUnitCost(Marine.unitCost);
+          player2Units.add(new Marine(worldWidth-30, worldHeight/2, false));
+        }
+      }
+      case PLAYER2_PURCHASE_SNIPER -> {
+        if (players[1].canAffordUnit(Sniper.unitCost)) {
+          players[1].spendUnitCost(Sniper.unitCost);
+          player2Units.add(new Sniper(worldWidth-30, worldHeight/2, false));
+        }
+      }
+      case PLAYER2_PURCHASE_ROGUE -> {
+        if (players[1].canAffordUnit(Rogue.unitCost)) {
+          players[1].spendUnitCost(Rogue.unitCost);
+          player2Units.add(new Rogue(worldWidth-30, worldHeight/2, false));
+        }
+      }
       case TEST_ACTION -> {
         System.out.println("hi");
       }
@@ -104,7 +134,12 @@ public class GameState {
   public void update(double dt) {
     players[0].update(dt);
     players[0].setResourceType(getResourceType(players[0].getX(), players[0].getY()));
+    players[1].update(dt);
+    players[1].setResourceType(getResourceType(players[1].getX(), players[1].getY()));
     for (Unit unit : player1Units) {
+      unit.update(dt);
+    }
+    for (Unit unit : player2Units) {
       unit.update(dt);
     }
   }
@@ -114,7 +149,11 @@ public class GameState {
     bases[0].draw(g2);
     bases[1].draw(g2);
     players[0].draw(g2);
+    players[1].draw(g2);
     for (Unit unit : player1Units) {
+      unit.draw(g2);
+    }
+    for (Unit unit : player2Units) {
       unit.draw(g2);
     }
     drawStatusBar(g2);
@@ -124,26 +163,52 @@ public class GameState {
   private void drawStatusBar(Graphics2D g2) {
     g2.setColor(new Color(0x555555));
     g2.fill(new Rectangle2D.Double(0, 0, worldWidth, STATUSBAR_HEIGHT));
+    // player1
     g2.setColor(Color.WHITE);
     g2.drawString(players[0].getResourceInventory(), 5, 15);
-
-    String buyUnitString = "";
+    String buyUnitStringPlayer1 = "";
     if (players[0].grass >= Marine.unitCost.grass &&
         players[0].sand >= Marine.unitCost.sand &&
         players[0].water >= Marine.unitCost.water) {
-      buyUnitString += "(1) Marine ";
+      buyUnitStringPlayer1 += "(1) Marine ";
     }
     if (players[0].grass >= Sniper.unitCost.grass &&
         players[0].sand >= Sniper.unitCost.sand &&
         players[0].water >= Sniper.unitCost.water) {
-      buyUnitString += "(2) Sniper ";
+      buyUnitStringPlayer1 += "(2) Sniper ";
     }
     if (players[0].grass >= Rogue.unitCost.grass &&
         players[0].sand >= Rogue.unitCost.sand &&
         players[0].water >= Rogue.unitCost.water) {
-      buyUnitString += "(3) Rogue ";
+      buyUnitStringPlayer1 += "(3) Rogue ";
     }
-    g2.drawString(buyUnitString, 5, 30);
+    g2.drawString(buyUnitStringPlayer1, 5, 30);
+    // player2
+    g2.setColor(Color.WHITE);
+    drawRightAlignedString(g2, players[1].getResourceInventory(), (int) worldWidth-7, 15);
+    String buyUnitStringPlayer2 = "";
+    if (players[1].grass >= Marine.unitCost.grass &&
+        players[1].sand >= Marine.unitCost.sand &&
+        players[1].water >= Marine.unitCost.water) {
+      buyUnitStringPlayer2 += "(Ins) Marine ";
+    }
+    if (players[1].grass >= Sniper.unitCost.grass &&
+        players[1].sand >= Sniper.unitCost.sand &&
+        players[1].water >= Sniper.unitCost.water) {
+      buyUnitStringPlayer2 += "(Hom) Sniper ";
+    }
+    if (players[1].grass >= Rogue.unitCost.grass &&
+        players[1].sand >= Rogue.unitCost.sand &&
+        players[1].water >= Rogue.unitCost.water) {
+      buyUnitStringPlayer2 += "(PgU) Rogue ";
+    }
+    drawRightAlignedString(g2, buyUnitStringPlayer2, (int) worldWidth-7, 30);
+  }
+
+  public void drawRightAlignedString(Graphics2D g2, String text, int rightX, int y) {
+    FontMetrics fm = g2.getFontMetrics();
+    int textWidth = fm.stringWidth(text);
+    g2.drawString(text, rightX - textWidth, y);
   }
 
   private static Logger log = LoggerFactory.getLogger(MainClass.class);

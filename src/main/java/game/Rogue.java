@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.Color;
+
 public class Rogue extends Unit {
   public static UnitCost unitCost = new UnitCost(20,20,0);
 
@@ -21,6 +23,7 @@ public class Rogue extends Unit {
     if (leftSide) {
       direction = (Math.random() * range) - halfRange;
     } else {
+      color = new Color(0x0040FF);
       direction = Math.PI + ((Math.random() * range) - halfRange);
     }
   }

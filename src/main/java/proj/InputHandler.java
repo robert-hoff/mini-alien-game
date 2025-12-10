@@ -23,6 +23,7 @@ public class InputHandler implements KeyListener {
   @Override
   public void keyPressed(KeyEvent e) {
     int code = e.getKeyCode();
+    // player1
     if (code == KeyEvent.VK_W) {
       player1Movement.movingUp = true;
     }
@@ -74,6 +75,59 @@ public class InputHandler implements KeyListener {
     if (code == KeyEvent.VK_3) {
       gameState.handleAction(GameAction.PLAYER1_PURCHASE_ROGUE);
     }
+    // player2
+    if (code == KeyEvent.VK_UP) {
+      player2Movement.movingUp = true;
+    }
+    if (code == KeyEvent.VK_DOWN) {
+      player2Movement.movingDown = true;
+    }
+    if (code == KeyEvent.VK_LEFT) {
+      player2Movement.movingLeft = true;
+    }
+    if (code == KeyEvent.VK_RIGHT) {
+      player2Movement.movingRight = true;
+    }
+    if (code == KeyEvent.VK_UP || code == KeyEvent.VK_DOWN || code == KeyEvent.VK_LEFT || code == KeyEvent.VK_RIGHT) {
+      int[] dir = player2Movement.getDir();
+      if (dir[0] == 0 && dir[1] == 0) {
+        gameState.handleAction(GameAction.PLAYER2_STOP);
+      }
+      if (dir[0] == 1 && dir[1] == 0) {
+        gameState.handleAction(GameAction.PLAYER2_E);
+      }
+      if (dir[0] == 1 && dir[1] == 1) {
+        gameState.handleAction(GameAction.PLAYER2_SE);
+      }
+      if (dir[0] == 0 && dir[1] == 1) {
+        gameState.handleAction(GameAction.PLAYER2_S);
+      }
+      if (dir[0] == -1 && dir[1] == 1) {
+        gameState.handleAction(GameAction.PLAYER2_SW);
+      }
+      if (dir[0] == -1 && dir[1] == 0) {
+        gameState.handleAction(GameAction.PLAYER2_W);
+      }
+      if (dir[0] == -1 && dir[1] == -1) {
+        gameState.handleAction(GameAction.PLAYER2_NW);
+      }
+      if (dir[0] == 0 && dir[1] == -1) {
+        gameState.handleAction(GameAction.PLAYER2_N);
+      }
+      if (dir[0] == 1 && dir[1] == -1) {
+        gameState.handleAction(GameAction.PLAYER2_NE);
+      }
+    }
+    if (code == KeyEvent.VK_INSERT) {
+      gameState.handleAction(GameAction.PLAYER2_PURCHASE_MARINE);
+    }
+    if (code == KeyEvent.VK_HOME) {
+      gameState.handleAction(GameAction.PLAYER2_PURCHASE_SNIPER);
+    }
+    if (code == KeyEvent.VK_PAGE_UP) {
+      gameState.handleAction(GameAction.PLAYER2_PURCHASE_ROGUE);
+    }
+
     if (code == KeyEvent.VK_ESCAPE) {
       Window window = SwingUtilities.getWindowAncestor(gameCanvas);
       window.dispatchEvent(new WindowEvent(window, WindowEvent.WINDOW_CLOSING));
@@ -86,6 +140,7 @@ public class InputHandler implements KeyListener {
   @Override
   public void keyReleased(KeyEvent e) {
     int code = e.getKeyCode();
+    // player1
     if (code == KeyEvent.VK_W) {
       player1Movement.movingUp = false;
     }
@@ -128,12 +183,53 @@ public class InputHandler implements KeyListener {
         gameState.handleAction(GameAction.PLAYER1_NE);
       }
     }
+    // player2
+    if (code == KeyEvent.VK_UP) {
+      player2Movement.movingUp = false;
+    }
+    if (code == KeyEvent.VK_DOWN) {
+      player2Movement.movingDown = false;
+    }
+    if (code == KeyEvent.VK_LEFT) {
+      player2Movement.movingLeft = false;
+    }
+    if (code == KeyEvent.VK_RIGHT) {
+      player2Movement.movingRight = false;
+    }
+    if (code == KeyEvent.VK_UP || code == KeyEvent.VK_DOWN || code == KeyEvent.VK_LEFT || code == KeyEvent.VK_RIGHT) {
+      int[] dir = player2Movement.getDir();
+      if (dir[0] == 0 && dir[1] == 0) {
+        gameState.handleAction(GameAction.PLAYER2_STOP);
+      }
+      if (dir[0] == 1 && dir[1] == 0) {
+        gameState.handleAction(GameAction.PLAYER2_E);
+      }
+      if (dir[0] == 1 && dir[1] == 1) {
+        gameState.handleAction(GameAction.PLAYER2_SE);
+      }
+      if (dir[0] == 0 && dir[1] == 1) {
+        gameState.handleAction(GameAction.PLAYER2_S);
+      }
+      if (dir[0] == -1 && dir[1] == 1) {
+        gameState.handleAction(GameAction.PLAYER2_SW);
+      }
+      if (dir[0] == -1 && dir[1] == 0) {
+        gameState.handleAction(GameAction.PLAYER2_W);
+      }
+      if (dir[0] == -1 && dir[1] == -1) {
+        gameState.handleAction(GameAction.PLAYER2_NW);
+      }
+      if (dir[0] == 0 && dir[1] == -1) {
+        gameState.handleAction(GameAction.PLAYER2_N);
+      }
+      if (dir[0] == 1 && dir[1] == -1) {
+        gameState.handleAction(GameAction.PLAYER2_NE);
+      }
+    }
   }
 
   @Override
-  public void keyTyped(KeyEvent e) {
-    // TODO Auto-generated method stub
-  }
+  public void keyTyped(KeyEvent e) {}
 
   private class Movement {
     private boolean movingUp = false;
@@ -149,6 +245,5 @@ public class InputHandler implements KeyListener {
       return new int[] {left+right,up+down};
     }
   }
-
 }
 

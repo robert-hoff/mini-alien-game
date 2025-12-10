@@ -15,13 +15,16 @@ public class Player extends Entity {
   public int sand;
   public int water;
   public int grass;
+  private Color playerColor;
 
-  public Player(double x, double y) {
+  public Player(double x, double y, boolean player1) {
     this.x = x;
     this.y = y;
     this.size = 13;
     this.speed = 300;
     this.hp = 200;
+    // this.player1 = player1;
+    playerColor = player1 ? Color.RED : new Color(0x0040FF);
   }
 
   public double getX() {return x;}
@@ -106,7 +109,7 @@ public class Player extends Entity {
   @Override
   public void draw(Graphics2D g2) {
     double half = size/2;
-    g2.setColor(new Color(0xFF7D7D));
+    g2.setColor(playerColor);
     g2.fill(new Rectangle2D.Double(x-half, y-half, size, size));
     g2.setColor(new Color(0x322023));
     g2.setStroke(new BasicStroke(2));

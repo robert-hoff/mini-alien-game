@@ -1,5 +1,7 @@
 package game;
 
+import java.awt.Color;
+
 public class Marine extends Unit {
   public static UnitCost unitCost = new UnitCost(10,10,10);
 
@@ -21,6 +23,7 @@ public class Marine extends Unit {
     if (leftSide) {
       direction = (Math.random() * range) - halfRange;
     } else {
+      color = new Color(0x0040FF);
       direction = Math.PI + ((Math.random() * range) - halfRange);
     }
   }
