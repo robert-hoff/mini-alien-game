@@ -7,7 +7,6 @@ import java.awt.event.WindowEvent;
 import javax.swing.SwingUtilities;
 import game.GameAction;
 
-
 public class InputHandler implements KeyListener {
 
   private GameState gameState;
@@ -65,6 +64,15 @@ public class InputHandler implements KeyListener {
       if (dir[0] == 1 && dir[1] == -1) {
         gameState.handleAction(GameAction.PLAYER1_NE);
       }
+    }
+    if (code == KeyEvent.VK_1) {
+      gameState.handleAction(GameAction.PLAYER1_PURCHASE_MARINE);
+    }
+    if (code == KeyEvent.VK_2) {
+      gameState.handleAction(GameAction.PLAYER1_PURCHASE_SNIPER);
+    }
+    if (code == KeyEvent.VK_3) {
+      gameState.handleAction(GameAction.PLAYER1_PURCHASE_ROGUE);
     }
     if (code == KeyEvent.VK_ESCAPE) {
       Window window = SwingUtilities.getWindowAncestor(gameCanvas);

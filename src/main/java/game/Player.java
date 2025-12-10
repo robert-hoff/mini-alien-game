@@ -12,9 +12,9 @@ public class Player extends Entity {
   protected int hp;
   protected boolean stop = true;
   protected ResourceType resource;
-  private int sand;
-  private int water;
-  private int grass;
+  public int sand;
+  public int water;
+  public int grass;
 
   public Player(double x, double y) {
     this.x = x;
@@ -36,20 +36,30 @@ public class Player extends Entity {
     if (resource == ResourceType.GRASS && grass < cap) {
       grass++;
     }
-    if (resource == ResourceType.WATER && water < cap) {
-      water++;
-    }
     if (resource == ResourceType.SAND && sand < cap) {
       sand++;
+    }
+    if (resource == ResourceType.WATER && water < cap) {
+      water++;
     }
   }
 
   public String getResourceInventory() {
-    return String.format("%dS %dW %dG", sand, water, grass);
+    return String.format("%dG %dS %dW", grass, sand, water);
   }
 
   public void setdirection(double direction) {
     this.direction = direction;
+  }
+
+  public boolean canAffordUnit(UnitCost unitCost) {
+    return grass >= unitCost.grass && sand >= unitCost.sand && water >= unitCost.water;
+  }
+
+  public void spendUnitCost(UnitCost unitCost) {
+    grass -= unitCost.grass;
+    sand -= unitCost.sand;
+    water -= unitCost.water;
   }
 
   public void setStop(boolean stop) {

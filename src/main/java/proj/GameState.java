@@ -12,8 +12,11 @@ import org.slf4j.LoggerFactory;
 import game.Base;
 import game.Entity;
 import game.GameAction;
+import game.Marine;
 import game.Player;
 import game.ResourceType;
+import game.Rogue;
+import game.Sniper;
 import game.Unit;
 
 public class GameState {
@@ -47,7 +50,6 @@ public class GameState {
     players[0].setResourceType(getResourceType(players[0].getX(), players[0].getY()));
     bases[0] = new Base(true);
     bases[1] = new Base(false);
-    player1Units.add(new Unit());
   }
 
   private ResourceType getResourceType(double x, double y) {
@@ -74,6 +76,24 @@ public class GameState {
       case PLAYER1_W  -> {players[0].setdirection(Math.PI * 4 / 4); players[0].setStop(false);}
       case PLAYER1_NW -> {players[0].setdirection(Math.PI * 5 / 4); players[0].setStop(false);}
       case PLAYER1_STOP -> players[0].setStop(true);
+      case PLAYER1_PURCHASE_MARINE -> {
+        if (players[0].canAffordUnit(Marine.unitCost)) {
+          players[0].spendUnitCost(Marine.unitCost);
+          player1Units.add(new Marine(10, worldHeight/2, true));
+        }
+      }
+      case PLAYER1_PURCHASE_SNIPER -> {
+        if (players[0].canAffordUnit(Sniper.unitCost)) {
+          players[0].spendUnitCost(Sniper.unitCost);
+          player1Units.add(new Sniper(10, worldHeight/2, true));
+        }
+      }
+      case PLAYER1_PURCHASE_ROGUE -> {
+        if (players[0].canAffordUnit(Rogue.unitCost)) {
+          players[0].spendUnitCost(Rogue.unitCost);
+          player1Units.add(new Rogue(10, worldHeight/2, true));
+        }
+      }
       case TEST_ACTION -> {
         System.out.println("hi");
       }
@@ -106,7 +126,24 @@ public class GameState {
     g2.fill(new Rectangle2D.Double(0, 0, worldWidth, STATUSBAR_HEIGHT));
     g2.setColor(Color.WHITE);
     g2.drawString(players[0].getResourceInventory(), 5, 15);
-    // g2.drawString(player1Text, 5, 30);
+
+    String buyUnitString = "";
+    if (players[0].grass >= Marine.unitCost.grass &&
+        players[0].sand >= Marine.unitCost.sand &&
+        players[0].water >= Marine.unitCost.water) {
+      buyUnitString += "(1) Marine ";
+    }
+    if (players[0].grass >= Sniper.unitCost.grass &&
+        players[0].sand >= Sniper.unitCost.sand &&
+        players[0].water >= Sniper.unitCost.water) {
+      buyUnitString += "(2) Sniper ";
+    }
+    if (players[0].grass >= Rogue.unitCost.grass &&
+        players[0].sand >= Rogue.unitCost.sand &&
+        players[0].water >= Rogue.unitCost.water) {
+      buyUnitString += "(3) Rogue ";
+    }
+    g2.drawString(buyUnitString, 5, 30);
   }
 
   private static Logger log = LoggerFactory.getLogger(MainClass.class);

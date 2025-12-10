@@ -5,34 +5,22 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Path2D;
-import java.util.Random;
 import java.awt.geom.Ellipse2D;
 
-public class Unit extends Entity {
+public abstract class Unit extends Entity {
 
   protected double direction;
-  protected double spin;
   protected double speed;
   protected int hp;
   protected double range;
   protected double accuracy;
   protected int damage;
+  protected double spinD = 0.03;
 
-  public Unit() {
-    x = 200;
-    y = 500;
-    size = 15;
-    Random r = new Random();
-    // direction = 2 * Math.PI * r.nextDouble();
-    direction = Math.PI/2 + 0.5;
-    spin = 2 * Math.PI * r.nextDouble();
-    speed = 80;
-    range = 120;
-  }
-
+  private double spin;
   @Override
   public void update(double dt) {
-    spin += 0.03;
+    spin += spinD;
     double vx = Math.cos(direction) * speed;
     double vy = Math.sin(direction) * speed;
     x += vx * dt;
