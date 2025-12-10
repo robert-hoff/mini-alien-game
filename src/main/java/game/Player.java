@@ -12,9 +12,7 @@ public class Player extends Entity {
   protected int hp;
   protected boolean stop = true;
   protected ResourceType resource;
-  public int sand;
-  public int water;
-  public int grass;
+  protected ResourceInventory resourceInventory = new ResourceInventory(0, 0, 0);
   private Color playerColor;
 
   public Player(double x, double y, boolean player1) {
@@ -35,20 +33,19 @@ public class Player extends Entity {
   }
 
   private void collectResource() {
-    int cap = 50;
-    if (resource == ResourceType.GRASS && grass < cap) {
-      grass++;
+    if (resource == ResourceType.GRASS) {
+      resourceInventory.collectGrass();
     }
-    if (resource == ResourceType.SAND && sand < cap) {
-      sand++;
+    if (resource == ResourceType.SAND) {
+      resourceInventory.collectSand();
     }
-    if (resource == ResourceType.WATER && water < cap) {
-      water++;
+    if (resource == ResourceType.WATER) {
+      resourceInventory.collectWater();
     }
   }
 
-  public String getResourceInventory() {
-    return String.format("%dG %dS %dW", grass, sand, water);
+  public ResourceInventory getResourceInventory() {
+    return resourceInventory;
   }
 
   public void setdirection(double direction) {
@@ -56,13 +53,11 @@ public class Player extends Entity {
   }
 
   public boolean canAffordUnit(UnitCost unitCost) {
-    return grass >= unitCost.grass && sand >= unitCost.sand && water >= unitCost.water;
+    return resourceInventory.canAffordUnit(unitCost);
   }
 
   public void spendUnitCost(UnitCost unitCost) {
-    grass -= unitCost.grass;
-    sand -= unitCost.sand;
-    water -= unitCost.water;
+    resourceInventory.spendUnitcost(unitCost);
   }
 
   public void setStop(boolean stop) {
@@ -88,7 +83,7 @@ public class Player extends Entity {
       return;
     } else {
       double vx = Math.cos(direction) * speed;
-      double vy = Math.sin(direction) * speed;  // use -Math.sin if you want math-style up
+      double vy = Math.sin(direction) * speed;
       x += vx * dt;
       y += vy * dt;
       if (x < size/2) {

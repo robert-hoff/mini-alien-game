@@ -15,6 +15,7 @@ import game.Entity;
 import game.GameAction;
 import game.Marine;
 import game.Player;
+import game.ResourceInventory;
 import game.ResourceType;
 import game.Rogue;
 import game.Sniper;
@@ -165,41 +166,45 @@ public class GameState {
     g2.fill(new Rectangle2D.Double(0, 0, worldWidth, STATUSBAR_HEIGHT));
     // player1
     g2.setColor(Color.WHITE);
-    g2.drawString(players[0].getResourceInventory(), 5, 15);
+    g2.drawString(players[0].getResourceInventory().getResourceStatusText(), 5, 15);
+    ResourceInventory playerInv1 = players[0].getResourceInventory();
+
     String buyUnitStringPlayer1 = "";
-    if (players[0].grass >= Marine.unitCost.grass &&
-        players[0].sand >= Marine.unitCost.sand &&
-        players[0].water >= Marine.unitCost.water) {
+    if (playerInv1.getGrass() >= Marine.unitCost.grass &&
+        playerInv1.getSand() >= Marine.unitCost.sand &&
+        playerInv1.getWater() >= Marine.unitCost.water) {
       buyUnitStringPlayer1 += "(1) Marine ";
     }
-    if (players[0].grass >= Sniper.unitCost.grass &&
-        players[0].sand >= Sniper.unitCost.sand &&
-        players[0].water >= Sniper.unitCost.water) {
+    if (playerInv1.getGrass() >= Sniper.unitCost.grass &&
+        playerInv1.getSand() >= Sniper.unitCost.sand &&
+        playerInv1.getWater() >= Sniper.unitCost.water) {
       buyUnitStringPlayer1 += "(2) Sniper ";
     }
-    if (players[0].grass >= Rogue.unitCost.grass &&
-        players[0].sand >= Rogue.unitCost.sand &&
-        players[0].water >= Rogue.unitCost.water) {
+    if (playerInv1.getGrass() >= Rogue.unitCost.grass &&
+        playerInv1.getSand() >= Rogue.unitCost.sand &&
+        playerInv1.getWater() >= Rogue.unitCost.water) {
       buyUnitStringPlayer1 += "(3) Rogue ";
     }
     g2.drawString(buyUnitStringPlayer1, 5, 30);
     // player2
     g2.setColor(Color.WHITE);
-    drawRightAlignedString(g2, players[1].getResourceInventory(), (int) worldWidth-7, 15);
+    drawRightAlignedString(g2, players[1].getResourceInventory().getResourceStatusText(), (int) worldWidth-7, 15);
+    ResourceInventory playerInv2 = players[1].getResourceInventory();
+
     String buyUnitStringPlayer2 = "";
-    if (players[1].grass >= Marine.unitCost.grass &&
-        players[1].sand >= Marine.unitCost.sand &&
-        players[1].water >= Marine.unitCost.water) {
+    if (playerInv2.getGrass() >= Marine.unitCost.grass &&
+        playerInv2.getSand() >= Marine.unitCost.sand &&
+        playerInv2.getWater() >= Marine.unitCost.water) {
       buyUnitStringPlayer2 += "(Ins) Marine ";
     }
-    if (players[1].grass >= Sniper.unitCost.grass &&
-        players[1].sand >= Sniper.unitCost.sand &&
-        players[1].water >= Sniper.unitCost.water) {
+    if (playerInv2.getGrass() >= Sniper.unitCost.grass &&
+        playerInv2.getSand() >= Sniper.unitCost.sand &&
+        playerInv2.getWater() >= Sniper.unitCost.water) {
       buyUnitStringPlayer2 += "(Hom) Sniper ";
     }
-    if (players[1].grass >= Rogue.unitCost.grass &&
-        players[1].sand >= Rogue.unitCost.sand &&
-        players[1].water >= Rogue.unitCost.water) {
+    if (playerInv2.getGrass() >= Rogue.unitCost.grass &&
+        playerInv2.getSand() >= Rogue.unitCost.sand &&
+        playerInv2.getWater() >= Rogue.unitCost.water) {
       buyUnitStringPlayer2 += "(PgU) Rogue ";
     }
     drawRightAlignedString(g2, buyUnitStringPlayer2, (int) worldWidth-7, 30);
